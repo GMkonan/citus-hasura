@@ -37,6 +37,35 @@ If you need to delete your docker containers and volumes use this commands:
 - `docker rm -f $(docker ps -a -q)`
 - `docker volume rm $(docker volume ls -q)`
 
+## Insert dummy data easily
+You can create some dummy data in postgres by using the `generate_series` function like this:
+```sql
+-- simple example
+INSERT INTO users (hash_key, content, unix_timestamp, "timestamp")
+SELECT
+md5(random()::text),
+'this is some content that will be the same for every new row', -- USE SINGLE QUOTES!!!
+-- https://stackoverflow.com/questions/22964272/postgresql-get-a-random-datetime-timestamp-between-two-datetime-timestamp
+date_part('epoch', NOW() + (random() * (NOW()+'90 days' - NOW())) + '30 days'),
+NOW() + (random() * (NOW()+'90 days' - NOW())) + '30 days'
+FROM generate_series(1, 10000) s(i)
+```
+Check here for an [stackoverflow example](https://stackoverflow.com/questions/24841142/how-can-i-generate-big-data-sample-for-postgresql-using-generate-series-and-rand), if you need more info, go to postgres docs!
+
+## Info about query in postgres
+You can get some info about some query like this:
+```sql
+EXPLAIN (ANALYZE, COSTS OFF)
+SELECT * FROM users
+```
+REF: [stackoverflow](https://stackoverflow.com/questions/9063402/get-execution-time-of-postgresql-query)
+
+## Unsafe triggers in citus
+There is probably a better solution, but for now what I know is that you can run this befor any query that has a trigger to avoid the "unsafe trigger" error:
+```
+SET citus.enable_unsafe_triggers TO on;
+```
+
 ### Useful Links
 - [Example citus docker](https://github.com/citusdata/docker/blob/master/docker-compose.yml)
 - [Old example citus with hasura](https://github.com/rongfengliang/citus-hasura-graphql)
