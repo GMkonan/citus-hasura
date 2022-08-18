@@ -32,7 +32,8 @@ we can copy it to a table we want (the table should be already created):
 ## Rollups
 
 
-## Random Help
+# Help
+## Deleting docker stuff to reset
 If you need to delete your docker containers and volumes use this commands:
 - `docker rm -f $(docker ps -a -q)`
 - `docker volume rm $(docker volume ls -q)`
@@ -71,3 +72,8 @@ SET citus.enable_unsafe_triggers TO on;
 - [Old example citus with hasura](https://github.com/rongfengliang/citus-hasura-graphql)
 - [Safe incremental rollups on Postgres and Citus](https://gist.github.com/marcocitus/1ac72e7533dbb01801973ee51f89fecf)
 - [citus great tutorial realtime analytics](https://docs.citusdata.com/en/v11.0/get_started/tutorial_realtime_analytics.html)
+
+### Useful Postgres stuff
+- [pg hero for checking performance](https://github.com/ankane/pghero)
+- [stackoverflow what columns generally make good indexes](https://stackoverflow.com/questions/107132/what-columns-generally-make-good-indexes)
+- [tableplus for database management](https://tableplus.com/)
