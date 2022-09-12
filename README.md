@@ -17,7 +17,7 @@ Example:
 `docker cp users.csv 06ae36661338:/users.csv`
 
 After that you can enter in postgres (master) with:
-`sudo docker exec -it citus_master /bin/bash`
+`sudo docker exec -it citus_master /bin/bash` (citus_master is the container's name)
 and Now that you entered you can simply run:
 
 ```bash
@@ -39,10 +39,19 @@ we can copy it to a table we want (the table should be already created):
 
 ## Deleting docker stuff to reset
 
-If you need to delete your docker containers and volumes use this commands:
+If you need to delete ALL your docker containers and volumes use this commands:
 
 - `docker rm -f $(docker ps -a -q)`
 - `docker volume rm $(docker volume ls -q)`
+
+If you want to delete only some containers or/and some volumes you can do this:
+
+- `docker ps` to check all containers
+- `docker rm -f CONTAINER_ID` you can see the id in the other command's output.
+
+To delete volume:
+- `docker volume ls` To check all volumes
+- `docker volume rm -f VOLUME_NAME` you can check volume name in command above.
 
 ## Insert dummy data easily
 
@@ -107,3 +116,9 @@ If are a bit unsure about docker stuff this should give you a help, this is not 
 Docker works with containers, those containers represent our "services", for example you can have a docker container that has a postgres image, so when this container is up
 you have a postgres db running, this container can have data inside but if you delete this container this data is gonna dissappear too. If you want to PERSIST data for a container you can create a VOLUME, if your container is deleted but your volume is not you will still have this data persisted when you recreate this container. This does mean that if you want to completely reset this container's data you need to delete both container and volume.
 
+### Checking errors in docker
+Sometimes an error can get past the build and create process of a docker container, so for example, you can have a container appear to be working fine, but if you check `docker ps` you can see that is constantly restarting itself.
+
+To debug a scenario like this you can check `docker logs`:
+
+- `docker logs --tail 50 --follow --timestamps CONTAINER_NAME`
